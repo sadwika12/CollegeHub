@@ -2,8 +2,7 @@ import { useAuth } from "../context/AuthContext"
 import { Navigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
-
-const StudentFeed      = () => <div className="p-6 text-lg font-medium text-gray-700">Student Feed — Member 2 building this</div>
+import StudentFeed from "./StudentFeed"
 const FacultyDashboard = () => <div className="p-6 text-lg font-medium text-gray-700">Faculty Dashboard — Member 3 building this</div>
 const HODDashboard     = () => <div className="p-6 text-lg font-medium text-gray-700">HOD Dashboard — Member 3 building this</div>
 const DeanDashboard    = () => <div className="p-6 text-lg font-medium text-gray-700">Dean Dashboard — Member 3 building this</div>

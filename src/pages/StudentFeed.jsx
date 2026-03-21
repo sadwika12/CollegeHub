@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import AnnouncementCard from "../components/AnnouncementCard";
 import FilterBar from "../components/FilterBar";
 import SearchBar from "../components/SearchBar";
-import Navbar from "../components/Navbar";
+
 
 export default function StudentFeed() {
   const { user } = useAuth();
@@ -18,7 +18,6 @@ export default function StudentFeed() {
   const filtered = useMemo(() => {
     let result = [...dummyAnnouncements];
 
-    // Search across title and content
     if (search.trim()) {
       result = result.filter(
         (a) =>
@@ -27,21 +26,16 @@ export default function StudentFeed() {
       );
     }
 
-    // Category filter
     if (filters.category !== "all") {
       result = result.filter((a) => a.category === filters.category);
     }
 
-    // Department filter
-    // null department = posted for everyone, always show
-    // specific department = only show if it matches selected
     if (filters.department !== "All") {
       result = result.filter(
         (a) => a.department === null || a.department === filters.department
       );
     }
 
-    // Sort by date
     result.sort((a, b) =>
       filters.sort === "newest"
         ? new Date(b.createdAt) - new Date(a.createdAt)
@@ -53,7 +47,6 @@ export default function StudentFeed() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
 
       <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-5">
 
@@ -93,6 +86,7 @@ export default function StudentFeed() {
             <p className="font-medium">No announcements match your filters.</p>
           </div>
         )}
+
       </div>
     </div>
   );
