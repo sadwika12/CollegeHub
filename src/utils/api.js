@@ -4,7 +4,7 @@ import { dummyAnnouncements, dummyUsers, dummyOrganizations } from "./dummyData"
 export const loginUser = (email, password) => {
   const user = dummyUsers.find((u) => u.email === email)
   if (user) return { success: true, user }
-  return { success: false, message: "User not found" }
+  return { success: false, message: "Invalid email or password" }
 }
 
 export const registerUser = (data) => {
