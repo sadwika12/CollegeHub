@@ -2,13 +2,12 @@ import { useAuth } from "../context/AuthContext"
 import { Navigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/Sidebar"
-
+import FacultyDashboard from './FacultyDashboard'
+import HODDashboard from './HodDashboard'
+import DeanDashboard from './DeanDashboard'
+import OrgDashboard from './OrgDashboard'
 const StudentFeed      = () => <div className="p-6 text-lg font-medium text-gray-700">Student Feed — Member 2 building this</div>
-const FacultyDashboard = () => <div className="p-6 text-lg font-medium text-gray-700">Faculty Dashboard — Member 3 building this</div>
-const HODDashboard     = () => <div className="p-6 text-lg font-medium text-gray-700">HOD Dashboard — Member 3 building this</div>
-const DeanDashboard    = () => <div className="p-6 text-lg font-medium text-gray-700">Dean Dashboard — Member 3 building this</div>
-const OrgDashboard     = () => <div className="p-6 text-lg font-medium text-gray-700">Org Dashboard — Member 3 building this</div>
-const CellDashboard    = () => <div className="p-6 text-lg font-medium text-gray-700">Cell Dashboard — Member 3 building this</div>
+
 
 const Dashboard = () => {
   const { user, switchRole } = useAuth()
@@ -23,7 +22,7 @@ const Dashboard = () => {
       case 'faculty':      return <FacultyDashboard />
       case 'hod':          return <HODDashboard />
       case 'dean':         return <DeanDashboard />
-      case 'cell':         return <CellDashboard />
+     // case 'cell':         return <CellDashboard />
       case 'organization': return <OrgDashboard />
       case 'admin':        return <Navigate to="/admin" replace />
       default:             return <div className="p-6">Unknown role</div>
