@@ -65,16 +65,10 @@ export default function CreateAnnouncement() {
 
   return (
     <div style={{ padding: "30px", fontFamily: "Arial", maxWidth: "600px" }}>
-
-      {/* Header */}
       <h1 style={{ color: "#1a1a2e" }}>📝 Create Announcement</h1>
       <p style={{ color: "#555" }}>Fill in the details to post a new announcement</p>
       <hr />
-
-      {/* Form */}
       <div style={{ marginTop: "20px" }}>
-
-        {/* Title */}
         <div style={{ marginBottom: "16px" }}>
           <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold" }}>
             Title *
@@ -94,8 +88,6 @@ export default function CreateAnnouncement() {
             }}
           />
         </div>
-
-        {/* Content */}
         <div style={{ marginBottom: "16px" }}>
           <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold" }}>
             Content *
@@ -116,8 +108,6 @@ export default function CreateAnnouncement() {
             }}
           />
         </div>
-
-        {/* Category */}
         <div style={{ marginBottom: "16px" }}>
           <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold" }}>
             Category
@@ -141,8 +131,6 @@ export default function CreateAnnouncement() {
             <option value="assignment">Assignment</option>
           </select>
         </div>
-
-        {/* Target Audience */}
         <div style={{ marginBottom: "16px" }}>
           <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold" }}>
             Target Audience
@@ -163,8 +151,6 @@ export default function CreateAnnouncement() {
             <option value="department">Department Only</option>
           </select>
         </div>
-
-        {/* Department (only if department selected) */}
         {form.targetAudience === "department" && (
           <div style={{ marginBottom: "16px" }}>
             <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold" }}>
@@ -189,8 +175,6 @@ export default function CreateAnnouncement() {
             </select>
           </div>
         )}
-
-        {/* Important Checkbox */}
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
             <input
@@ -203,8 +187,6 @@ export default function CreateAnnouncement() {
             <span style={{ fontWeight: "bold" }}>⚠️ Mark as Important</span>
           </label>
         </div>
-
-        {/* Submit Button */}
         <button
           onClick={handleSubmit}
           style={{

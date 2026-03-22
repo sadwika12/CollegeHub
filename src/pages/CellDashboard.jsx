@@ -2,19 +2,15 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getAllPosts, getPostsByUser } from "../utils/postsStorage";
-import { dummyUsers, dummyOrganizations } from "../utils/dummyData";
-import { isOrgApproved } from "../utils/api";
-
-
-const ORG_INFO = {
-  "Student Mitra": { icon: "🎓", color: "#1d4ed8", bg: "#dbeafe", label: "Student Welfare"   },
-  "SDCAC":         { icon: "🎭", color: "#9d174d", bg: "#fce7f3", label: "Cultural Committee" },
-  "Helping Hands": { icon: "🤝", color: "#065f46", bg: "#d1fae5", label: "Social Service"     },
-  "Literary Club": { icon: "📖", color: "#d97706", bg: "#fef3c7", label: "Writing & Debate"   },
-  "Tech Club":     { icon: "💻", color: "#6d28d9", bg: "#ede9fe", label: "Technology Club"    },
+import { dummyUsers } from "../utils/dummyData";
+const CELL_INFO = {
+  "Exam Cell":    { icon: "📝", color: "#d97706", bg: "#fef3c7", label: "Exam Cell"    },
+  "CDP Cell":     { icon: "💼", color: "#065f46", bg: "#d1fae5", label: "CDP Cell"     },
+  "Library Cell": { icon: "📚", color: "#1d4ed8", bg: "#dbeafe", label: "Library Cell" },
 };
 
-const DEFAULT_ORG = { icon: "🏢", color: "#6d28d9", bg: "#ede9fe", label: "Organization" };
+
+const DEFAULT_CELL = { icon: "🏛️", color: "#6d28d9", bg: "#ede9fe", label: "Cell" };
 
 const categoryColors = {
   exam:       { bg: "#fef3c7", text: "#d97706", dot: "#f59e0b" },
@@ -23,28 +19,21 @@ const categoryColors = {
   assignment: { bg: "#d1fae5", text: "#065f46", dot: "#10b981" },
   general:    { bg: "#f3f4f6", text: "#374151", dot: "#6b7280" },
 };
-
-
-const allOrgUsers = Array.from(
+const allCellUsers = Array.from(
   new Map(
     dummyUsers
-      .filter((u) => u.role === "Organization")
+      .filter((u) => u.role === "Cell" || u.role === "cell")
       .map((u) => [u._id, u])
   ).values()
 );
 
-export default function OrgDashboard() {
+export default function CellDashboard() {
   const { user }   = useAuth();
   const navigate   = useNavigate();
 
-  const [myPosts,  setMyPosts]  = useState([]);
-  const [allPosts, setAllPosts] = useState([]);
-
-  
-  const orgInfo    = ORG_INFO[user?.name] || DEFAULT_ORG;
-
-  
-  const isApproved = isOrgApproved(user?.name);
+  const [myPosts,   setMyPosts]   = useState([]);
+  const [allPosts,  setAllPosts]  = useState([]);
+  const cellInfo = CELL_INFO[user?.name] || DEFAULT_CELL;
 
   useEffect(() => {
     if (!user?._id) return;
@@ -52,17 +41,13 @@ export default function OrgDashboard() {
     setAllPosts(getAllPosts());
   }, [user?._id]);
 
-  const eventCount     = myPosts.filter((a) => a.category === "event").length;
   const importantCount = myPosts.filter((a) => a.isImportant).length;
-
-  const getOrgPostCount = (orgUserId) =>
-    allPosts.filter((a) => a.postedBy?._id === orgUserId).length;
+  const getCellPostCount = (cellUserId) =>
+    allPosts.filter((a) => a.postedBy?._id === cellUserId).length;
 
   return (
     <div style={{ minHeight: "100vh", background: "#f5f3ff", padding: "28px 24px" }}>
       <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
-
-       
         <div style={{
           background: "linear-gradient(135deg, #6d28d9, #7c3aed, #8b5cf6)",
           borderRadius: 20, padding: "28px",
@@ -72,33 +57,19 @@ export default function OrgDashboard() {
           <div style={{ position: "absolute", width: 100, height: 100, borderRadius: "50%", background: "rgba(255,255,255,0.04)", bottom: -20, right: 100 }} />
           <div style={{ position: "relative" }}>
             <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", margin: "0 0 4px", fontWeight: 500 }}>
-              {orgInfo.icon} Organisation Dashboard
+              {cellInfo.icon} Cell Dashboard
             </p>
             <h1 style={{ fontSize: 24, fontWeight: 900, margin: "0 0 4px", letterSpacing: -0.5 }}>
               Welcome, {user?.name}
             </h1>
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", margin: "0 0 16px" }}>
-              {orgInfo.label} · College Wide
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", margin: "0 0 20px" }}>
+              {cellInfo.label} · College Wide
             </p>
-
-           
-            <div style={{ marginBottom: 20 }}>
-              <span style={{
-                fontSize: 12, fontWeight: 700, padding: "5px 14px", borderRadius: 20,
-                background: isApproved ? "rgba(16,185,129,0.25)" : "rgba(251,191,36,0.25)",
-                color: isApproved ? "#6ee7b7" : "#fcd34d",
-                border: `1px solid ${isApproved ? "rgba(16,185,129,0.4)" : "rgba(251,191,36,0.4)"}`,
-              }}>
-                {isApproved ? "✅ Approved Organisation" : "⏳ Pending Admin Approval"}
-              </span>
-            </div>
-
-          
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               {[
-                { label: "Total Posts", value: myPosts.length  },
-                { label: "Events",      value: eventCount      },
-                { label: "Important",   value: importantCount  },
+                { label: "My Posts",     value: myPosts.length       },
+                { label: "Important",    value: importantCount        },
+                { label: "Other Cells",  value: allCellUsers.length - 1 },
               ].map((s) => (
                 <div key={s.label} style={{
                   background: "rgba(255,255,255,0.15)", borderRadius: 12,
@@ -114,40 +85,18 @@ export default function OrgDashboard() {
             </div>
           </div>
         </div>
-
-        
-        {!isApproved && (
-          <div style={{
-            background: "#fef3c7", border: "1px solid #fde68a",
-            borderRadius: 14, padding: "14px 18px",
-            display: "flex", alignItems: "flex-start", gap: 12,
-          }}>
-            <span style={{ fontSize: 20, flexShrink: 0 }}>⏳</span>
-            <div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: "#92400e", margin: "0 0 4px" }}>
-                Awaiting Admin Approval
-              </p>
-              <p style={{ fontSize: 12, color: "#b45309", margin: 0 }}>
-                Your organisation is pending approval. You can create posts but they will be visible to students only after admin approves your account.
-              </p>
-            </div>
-          </div>
-        )}
-
-       
         <div>
           <h2 style={{ fontSize: 15, fontWeight: 900, color: "#3b0764", margin: "0 0 14px" }}>
-            🏢 All Organisations
+            🏛️ All Cells Overview
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))", gap: 12 }}>
-            {allOrgUsers.map((o) => {
-              const info  = ORG_INFO[o.name] || DEFAULT_ORG;
-              const isMe  = o._id === user?._id;
-              const count = getOrgPostCount(o._id);
-              const orgD  = { isApproved: isOrgApproved(o.name) };
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
+            {allCellUsers.map((c) => {
+              const info    = CELL_INFO[c.name] || DEFAULT_CELL;
+              const isMe    = c._id === user?._id;
+              const count   = getCellPostCount(c._id);
               return (
-                <div key={o._id} style={{
-                  background: "#fff", borderRadius: 14, padding: "16px 12px",
+                <div key={c._id} style={{
+                  background: "#fff", borderRadius: 14, padding: "18px 14px",
                   border: isMe ? "1.5px solid #c4b5fd" : "1px solid #ede9fe",
                   textAlign: "center",
                   boxShadow: isMe
@@ -159,45 +108,32 @@ export default function OrgDashboard() {
                   onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
                 >
                   <div style={{
-                    width: 44, height: 44, borderRadius: "50%",
+                    width: 48, height: 48, borderRadius: "50%",
                     background: info.bg, margin: "0 auto 10px",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 20,
+                    fontSize: 22,
                   }}>
                     {info.icon}
                   </div>
-                  <p style={{ fontSize: 12, fontWeight: 800, color: "#3b0764", margin: "0 0 3px" }}>
-                    {o.name}
+                  <p style={{ fontSize: 12, fontWeight: 800, color: "#3b0764", margin: "0 0 4px" }}>
+                    {c.name}
                   </p>
-                  <p style={{ fontSize: 10, color: "#a78bfa", margin: "0 0 6px" }}>
+                  <p style={{ fontSize: 11, color: "#a78bfa", margin: "0 0 8px" }}>
                     {count} post{count !== 1 ? "s" : ""}
                   </p>
-                
-                  <span style={{
-                    fontSize: 9, fontWeight: 700, padding: "2px 8px",
-                    borderRadius: 20,
-                    background: orgD?.isApproved ? "#d1fae5" : "#fef3c7",
-                    color:      orgD?.isApproved ? "#065f46" : "#d97706",
-                  }}>
-                    {orgD?.isApproved ? "✅ Approved" : "⏳ Pending"}
-                  </span>
                   {isMe && (
-                    <div style={{ marginTop: 6 }}>
-                      <span style={{
-                        fontSize: 9, fontWeight: 900, padding: "3px 10px",
-                        borderRadius: 20, background: "#6d28d9", color: "#fff",
-                      }}>
-                        ← You
-                      </span>
-                    </div>
+                    <span style={{
+                      fontSize: 9, fontWeight: 900, padding: "3px 10px",
+                      borderRadius: 20, background: "#6d28d9", color: "#fff",
+                    }}>
+                      ← You
+                    </span>
                   )}
                 </div>
               );
             })}
           </div>
         </div>
-
-        
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {[
             { label: "➕ Create Post", path: "/create",   bg: "#6d28d9", color: "#fff"    },
@@ -218,8 +154,6 @@ export default function OrgDashboard() {
             </button>
           ))}
         </div>
-
-        
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
             <div>
@@ -227,9 +161,7 @@ export default function OrgDashboard() {
                 📢 My Announcements
               </h2>
               <p style={{ fontSize: 12, color: "#a78bfa", margin: 0 }}>
-                {isApproved
-                  ? "Visible to all students in their feed"
-                  : "Visible after admin approval"}
+                Visible to all students in their feed
               </p>
             </div>
             <span style={{
@@ -246,19 +178,19 @@ export default function OrgDashboard() {
               padding: "48px 24px", textAlign: "center",
               boxShadow: "0 2px 12px rgba(109,40,217,0.06)",
             }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>{orgInfo.icon}</div>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>{cellInfo.icon}</div>
               <p style={{ fontSize: 15, fontWeight: 700, color: "#6d28d9", margin: "0 0 6px" }}>
                 No announcements yet
               </p>
               <p style={{ fontSize: 13, color: "#a78bfa", margin: "0 0 20px" }}>
-                Create your first post to reach all college students.
+                Create your first announcement — it will appear in all students' feeds.
               </p>
               <button onClick={() => navigate("/create")} style={{
                 padding: "10px 24px", background: "#6d28d9", color: "#fff",
                 borderRadius: 10, fontWeight: 700, fontSize: 13,
                 border: "none", cursor: "pointer",
               }}>
-                Create Post
+                Create Announcement
               </button>
             </div>
           ) : (
@@ -277,16 +209,13 @@ export default function OrgDashboard() {
                   }}
                     onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 8px 28px rgba(109,40,217,0.13)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.boxShadow = a.isImportant ? "0 4px 16px rgba(251,191,36,0.15)" : "0 2px 12px rgba(109,40,217,0.06)"; e.currentTarget.style.transform = "translateY(0)"; }}
-                  >
-                   
-                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10, alignItems: "center" }}>
-                      
+                  >                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10, alignItems: "center" }}>
                       <span style={{
                         fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 20,
-                        background: orgInfo.bg, color: orgInfo.color,
+                        background: cellInfo.bg, color: cellInfo.color,
                         display: "inline-flex", alignItems: "center", gap: 5,
                       }}>
-                        {orgInfo.icon} {user?.name}
+                        {cellInfo.icon} {cellInfo.label}
                       </span>
                       <span style={{
                         fontSize: 11, fontWeight: 800, padding: "3px 10px", borderRadius: 20,
@@ -307,15 +236,16 @@ export default function OrgDashboard() {
                         </span>
                       )}
                     </div>
-
                     <h3 style={{ fontSize: 15, fontWeight: 800, color: "#3b0764", margin: "0 0 6px", lineHeight: 1.4 }}>
                       {a.title}
                     </h3>
                     <p style={{ fontSize: 13, color: "#6b7280", margin: "0 0 14px", lineHeight: 1.6 }}>
                       {a.content}
                     </p>
-
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 12, borderTop: "1px solid #f5f3ff" }}>
+                    <div style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      paddingTop: 12, borderTop: "1px solid #f5f3ff",
+                    }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <div style={{
                           width: 26, height: 26, borderRadius: "50%",
@@ -325,9 +255,13 @@ export default function OrgDashboard() {
                         }}>
                           {user?.name?.[0]}
                         </div>
-                        <span style={{ fontSize: 12, color: "#7c3aed", fontWeight: 600 }}>{user?.name}</span>
+                        <span style={{ fontSize: 12, color: "#7c3aed", fontWeight: 600 }}>
+                          {user?.name}
+                        </span>
                       </div>
-                      <span style={{ fontSize: 11, color: "#c4b5fd" }}>Posted on: {a.createdAt}</span>
+                      <span style={{ fontSize: 11, color: "#c4b5fd" }}>
+                        Posted on: {a.createdAt}
+                      </span>
                     </div>
                   </div>
                 );
@@ -340,4 +274,3 @@ export default function OrgDashboard() {
     </div>
   );
 }
-

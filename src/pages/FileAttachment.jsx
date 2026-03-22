@@ -27,12 +27,12 @@ export default function FileAttachment() {
   return (
     <div style={{ padding: "30px", fontFamily: "Arial", maxWidth: "500px" }}>
 
-      {/* Header */}
+     
       <h1 style={{ color: "#1a1a2e" }}>📎 File Attachment</h1>
       <p style={{ color: "#555" }}>Attach a file to your announcement</p>
       <hr />
 
-      {/* Upload Box */}
+   
       <div style={{
         marginTop: "20px",
         border: "2px dashed #4a90e2",
@@ -69,7 +69,7 @@ export default function FileAttachment() {
         </label>
       </div>
 
-      {/* Selected File Info */}
+    
       {selectedFile && (
         <div style={{
           marginTop: "20px",
@@ -84,7 +84,7 @@ export default function FileAttachment() {
             Size: {(selectedFile.size / 1024).toFixed(2)} KB
           </p>
 
-          {/* Upload & Remove Buttons */}
+          
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               onClick={handleUpload}
@@ -122,7 +122,7 @@ export default function FileAttachment() {
         </div>
       )}
 
-      {/* Success Message */}
+    
       {uploaded && (
         <div style={{
           marginTop: "16px",
