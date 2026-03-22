@@ -1,0 +1,416 @@
+/* ============================================================
+   violet-theme.css
+   Import this ONCE in your src/index.css or src/main.jsx:
+     import './violet-theme.css'
+
+   This gives the violet dream theme + animations to your
+   entire app without touching any dashboard files.
+   ============================================================ */
+
+/* ── Keyframe animations ── */
+@keyframes ch-slideIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes ch-fadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes ch-barGrow {
+  from { height: 0; opacity: 0; }
+  to   { height: 18px; opacity: 1; }
+}
+@keyframes ch-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes ch-pulse {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.28; }
+}
+
+/* ── Utility animation classes ── */
+.ch-slide-in  { animation: ch-slideIn  .6s ease both; opacity: 0; }
+.ch-fade-down { animation: ch-fadeDown .6s ease both; opacity: 0; }
+.ch-bar-grow  { animation: ch-barGrow  .4s ease forwards; }
+.ch-shimmer   { animation: ch-shimmer  4s linear infinite; }
+
+/* ── Stagger delays (0–13 items covers 2 seconds at 140ms each) ── */
+.ch-delay-0  { animation-delay:    0ms; }
+.ch-delay-1  { animation-delay:  140ms; }
+.ch-delay-2  { animation-delay:  280ms; }
+.ch-delay-3  { animation-delay:  420ms; }
+.ch-delay-4  { animation-delay:  560ms; }
+.ch-delay-5  { animation-delay:  700ms; }
+.ch-delay-6  { animation-delay:  840ms; }
+.ch-delay-7  { animation-delay:  980ms; }
+.ch-delay-8  { animation-delay: 1120ms; }
+.ch-delay-9  { animation-delay: 1260ms; }
+.ch-delay-10 { animation-delay: 1400ms; }
+.ch-delay-11 { animation-delay: 1540ms; }
+.ch-delay-12 { animation-delay: 1680ms; }
+.ch-delay-13 { animation-delay: 1820ms; }
+
+/* Navbar cascade delays */
+.ch-nav-logo    { animation-delay:  100ms; }
+.ch-nav-search  { animation-delay:  500ms; }
+.ch-nav-roles   { animation-delay:  900ms; }
+.ch-nav-actions { animation-delay: 1400ms; }
+
+/* ── Violet Dream colour tokens ── */
+:root {
+  --ch-violet:        #6d28d9;   /* navbar + sidebar bg       */
+  --ch-violet-hover:  rgba(255,255,255,0.12); /* item hover    */
+  --ch-violet-active: rgba(255,255,255,0.20); /* active item   */
+  --ch-body-bg:       #f5f3ff;   /* lavender body background  */
+  --ch-accent:        #fbbf24;   /* yellow active bar / dot   */
+  --ch-border:        rgba(255,255,255,0.12);
+  --ch-text-muted:    rgba(255,255,255,0.55);
+}
+
+/* ── Global body background ── 
+   This applies the lavender bg to the whole app.
+   Your dashboard bg-gray-50 classes will be overridden here. */
+body {
+  background-color: var(--ch-body-bg) !important;
+}
+
+/* Override any existing gray backgrounds on full-page wrappers */
+.min-h-screen.bg-gray-50,
+.min-h-screen.bg-white {
+  background-color: var(--ch-body-bg) !important;
+}
+
+/* ── Navbar base styles ── */
+.ch-navbar {
+  width: 100%;
+  height: 58px;
+  background: var(--ch-violet);
+  border-bottom: 1px solid var(--ch-border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.ch-logo-gem {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 16px rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+
+.ch-logo-text {
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  background: linear-gradient(90deg, #fff, #e9d5ff, #fff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: ch-shimmer 4s linear infinite;
+}
+
+.ch-search {
+  flex: 1;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 11px;
+  padding: 8px 13px;
+  transition: all .25s;
+}
+.ch-search:focus-within {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.45);
+}
+.ch-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 12.5px;
+  color: #fff;
+  width: 100%;
+}
+.ch-search input::placeholder { color: rgba(255,255,255,0.45); }
+.ch-search svg { color: #fff; flex-shrink: 0; }
+
+.ch-role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 12px;
+  padding: 5px 8px;
+  margin-left: auto;
+}
+.ch-role-lbl {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.ch-role-btn {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: none;
+  color: #fff;
+  transition: all .2s;
+  font-family: inherit;
+}
+.ch-role-btn:hover { background: rgba(255,255,255,0.15); }
+.ch-role-btn.active {
+  background: #fff;
+  color: var(--ch-violet);
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 0 14px rgba(255,255,255,0.3);
+  font-weight: 900;
+}
+
+.ch-icon-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+}
+.ch-icon-btn:hover { background: rgba(255,255,255,0.25); }
+
+.ch-notif-dot {
+  position: absolute;
+  top: 7px; right: 7px;
+  width: 7px; height: 7px;
+  background: #fbbf24;
+  border-radius: 50%;
+  border: 1.5px solid var(--ch-violet);
+  box-shadow: 0 0 6px #fbbf24;
+}
+
+.ch-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  box-shadow: 0 0 12px rgba(255,255,255,0.15);
+}
+
+/* ── Sidebar base styles ── */
+.ch-sidebar {
+  width: 232px;
+  min-height: 100vh;
+  height: 100vh;
+  background: var(--ch-violet);
+  border-right: 1px solid var(--ch-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.ch-sidebar::-webkit-scrollbar { width: 3px; }
+.ch-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
+
+.ch-user-card {
+  padding: 16px 14px 14px;
+  border-bottom: 1px solid var(--ch-border);
+}
+
+.ch-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 14px rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.ch-role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: capitalize;
+  margin-top: 10px;
+}
+.ch-role-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 6px #fbbf24;
+  flex-shrink: 0;
+}
+
+.ch-sec-label {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  padding: 0 8px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.ch-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  transition: all .22s;
+  border: 1px solid transparent;
+  width: 100%;
+  background: none;
+  text-align: left;
+  font-family: inherit;
+}
+.ch-nav-item:hover { background: var(--ch-violet-hover); }
+.ch-nav-item.active {
+  background: var(--ch-violet-active);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.ch-nav-badge {
+  font-size: 9.5px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  margin-left: auto;
+}
+
+.ch-active-bar {
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+  animation: ch-barGrow .4s ease forwards;
+}
+
+.ch-footer-strip {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--ch-border);
+}
+.ch-footer-inner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all .2s;
+}
+.ch-footer-inner:hover { background: rgba(255,255,255,0.2); }
+.ch-footer-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ── Profile dropdown ── */
+.ch-dropdown {
+  position: absolute;
+  right: 0;
+  top: 46px;
+  width: 200px;
+  background: #fff;
+  border: 1px solid #ede9fe;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(109,40,217,0.15);
+  z-index: 50;
+  overflow: hidden;
+}
+.ch-dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f0ff;
+}
+.ch-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 12.5px;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.ch-dropdown-item:hover { background: #f5f3ff; color: #6d28d9; }
+.ch-dropdown-item.danger { color: #ef4444; }
+.ch-dropdown-item.danger:hover { background: #fef2f2; }

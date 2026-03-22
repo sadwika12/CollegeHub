@@ -5,8 +5,6 @@ const categories = ["all", "exam", "event", "assignment", "academic", "general"]
 export default function FilterBar({ filters, setFilters }) {
   return (
     <div className="flex flex-wrap gap-3 items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
-
-      {/* Category chips */}
       <div className="flex gap-2 flex-wrap">
         {categories.map((cat) => (
           <button
@@ -24,8 +22,6 @@ export default function FilterBar({ filters, setFilters }) {
       </div>
 
       <div className="h-6 w-px bg-gray-200 hidden sm:block" />
-
-      {/* Department dropdown — from Member 1's dummyDepartments */}
       <select
         value={filters.department}
         onChange={(e) => setFilters((f) => ({ ...f, department: e.target.value }))}
@@ -38,8 +34,6 @@ export default function FilterBar({ filters, setFilters }) {
           </option>
         ))}
       </select>
-
-      {/* Date sort */}
       <select
         value={filters.sort}
         onChange={(e) => setFilters((f) => ({ ...f, sort: e.target.value }))}

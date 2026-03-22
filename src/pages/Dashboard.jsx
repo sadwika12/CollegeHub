@@ -7,42 +7,45 @@ import FacultyDashboard from './FacultyDashboard'
 import HODDashboard from './HodDashboard'
 import DeanDashboard from './DeanDashboard'
 import OrgDashboard from './OrgDashboard'
-
+import CellDashboard from './CellDashboard'
 
 const Dashboard = () => {
   const { user, switchRole } = useAuth()
 
   if (!user) return <Navigate to="/login" replace />
-
-  const roles = ['student', 'faculty', 'hod', 'dean', 'cell', 'organization', 'admin']
+  if (user.role === 'Admin') return <Navigate to="/admin" replace />
+  const roles = ['Student', 'Faculty', 'HOD', 'Dean', 'Cell', 'Organization', 'Admin']
 
   const renderDashboard = () => {
     switch (user.role) {
-      case 'student':      return <StudentFeed />
-      case 'faculty':      return <FacultyDashboard />
-      case 'hod':          return <HODDashboard />
-      case 'dean':         return <DeanDashboard />
-     // case 'cell':         return <CellDashboard />
-      case 'organization': return <OrgDashboard />
-      case 'admin':        return <Navigate to="/admin" replace />
-      default:             return <div className="p-6">Unknown role</div>
+      case 'Student':      return <StudentFeed />
+      case 'Faculty':      return <FacultyDashboard />
+      case 'HOD':          return <HODDashboard />
+      case 'Dean':         return <DeanDashboard />
+      case 'Cell':         return <CellDashboard />
+      case 'Organization': return <OrgDashboard />
+      default:             return (
+        <div className="p-6 text-center text-gray-500">
+          <p className="text-lg font-medium">No dashboard for role: <strong>{user.role}</strong></p>
+          <p className="text-sm mt-1">Please contact admin.</p>
+        </div>
+      )
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: "#f5f3ff" }}>
 
-      {/* Navbar on top */}
       <Navbar />
 
-      {/* Demo role switcher */}
-      <div className="bg-yellow-100 border-b border-yellow-300 px-4 py-2 flex items-center gap-3 text-sm">
+    
+      <div className="bg-yellow-100 border-b border-yellow-300 px-4 py-2 flex items-center gap-3 text-sm flex-wrap">
         <span className="font-medium text-yellow-800">Demo — switch role:</span>
         {roles.map((role) => (
           <button
             key={role}
             onClick={() => switchRole(role)}
-            className={`px-3 py-1 rounded-full border text-xs font-medium
+            className={`px-3 py-1 rounded-full border text-xs font-medium transition capitalize
               ${user.role === role
                 ? 'bg-yellow-500 text-white border-yellow-500'
                 : 'bg-white text-yellow-700 border-yellow-400 hover:bg-yellow-50'
@@ -53,7 +56,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Sidebar + main content */}
+    
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6">
@@ -66,3 +69,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+

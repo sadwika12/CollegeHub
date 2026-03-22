@@ -25,8 +25,6 @@ export default function AnnouncementCard({ announcement }) {
     <div className={`bg-white rounded-2xl shadow-sm border p-5 flex flex-col gap-3 transition hover:shadow-md ${
       isImportant ? "border-l-4 border-l-red-500" : "border-gray-200"
     }`}>
-
-      {/* Top row — badges + bookmark */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-wrap gap-2 items-center">
           <span className={`text-xs font-semibold px-2 py-1 rounded-full capitalize ${categoryColors[category] || "bg-gray-100 text-gray-600"}`}>
@@ -52,14 +50,8 @@ export default function AnnouncementCard({ announcement }) {
           {bookmarked ? "🔖" : "🏷️"}
         </button>
       </div>
-
-      {/* Title */}
       <h3 className="text-gray-900 font-semibold text-base leading-snug">{title}</h3>
-
-      {/* Content */}
       <p className="text-gray-500 text-sm leading-relaxed line-clamp-3">{content}</p>
-
-      {/* Footer — postedBy now has _id, name, role */}
       <div className="flex justify-between items-center text-xs text-gray-400 pt-1 border-t border-gray-100">
         <span>
           Posted by{" "}
